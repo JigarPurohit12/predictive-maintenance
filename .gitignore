@@ -1,0 +1,19 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Data is downloaded, not committed. See README for the source.
+data/
+mlruns/
+
+# results/ is deliberately NOT ignored — the JSON is the evidence.

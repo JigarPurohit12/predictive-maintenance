@@ -1,0 +1,15 @@
+target-version = "py311"
+line-length = 110
+
+[lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "FURB", "BLE", "C4"]
+ignore = [
+    "E501",   # long lines are almost always a long string or a long comment
+    "RUF012", # ClassVar annotations on plain constants add noise here
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["B011", "SIM117"]
+
+[lint.isort]
+known-first-party = ["config", "data_layer", "features", "training", "serving", "monitoring"]
