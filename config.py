@@ -81,7 +81,10 @@ class Settings(BaseSettings):
     sagemaker_transform_instance: str = "ml.m5.large"
 
     # --- MLflow ------------------------------------------------------------
-    mlflow_tracking_uri: str = "file:./mlruns"
+    #: sqlite, not ``file:./mlruns``: MLflow 3.x refuses the filesystem store
+    #: outright, and the *model registry* never worked on it at all. This is
+    #: still a local file with no server and no account.
+    mlflow_tracking_uri: str = "sqlite:///mlflow.db"
     mlflow_experiment: str = "pdm-failure-24h"
     mlflow_model_name: str = "pdm-xgb"
 

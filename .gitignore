@@ -15,5 +15,7 @@ build/
 # Data is downloaded, not committed. See README for the source.
 data/
 mlruns/
+mlflow.db
+mlartifacts/
 
 # results/ is deliberately NOT ignored — the JSON is the evidence.

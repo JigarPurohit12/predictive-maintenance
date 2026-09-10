@@ -86,6 +86,24 @@ def register_raw_frames(con: duckdb.DuckDBPyConnection, frames: Mapping[str, pd.
         con.execute(f"CREATE OR REPLACE VIEW raw_{name} AS SELECT * FROM _frame_{name}")
 
 
+#: The staged tables, by the name they carry in SQL.
+STAGED_TABLES: tuple[str, ...] = ("telemetry", "errors", "maint", "failures", "machines")
+
+
+def load_staged(con: duckdb.DuckDBPyConnection) -> dict[str, pd.DataFrame]:
+    """Pull the staged tables back into pandas for feature engineering.
+
+    Feature code reads *staged* tables, never raw ones: the deduplication and
+    the type casts in ``sql/01_staging.sql`` are the single cleaning path, and a
+    second one in pandas is how training and serving start to disagree.
+    """
+    staged: dict[str, pd.DataFrame] = {}
+    for name in STAGED_TABLES:
+        order = "machine_id" if name == "machines" else "machine_id, ts"
+        staged[name] = con.execute(f"SELECT * FROM stg_{name} ORDER BY {order}").df()
+    return staged
+
+
 def run_sql_file(con: duckdb.DuckDBPyConnection, filename: str, sql_dir: Path = SQL_DIR) -> None:
     path = sql_dir / filename
     LOGGER.debug("Executing %s", path)
